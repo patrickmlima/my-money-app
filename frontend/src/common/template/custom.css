@@ -3,3 +3,7 @@
   bottom: 0px;
   width: 100%;
 }
+
+.sidebar-toggle {
+  padding: 0px !important;
+}
