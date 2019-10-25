@@ -1,7 +1,15 @@
 export function selectTab(tabId) {
-    console.log('selecting tab: ', tabId)
     return {
         type: 'TAB_SELECTED',
         payload: tabId
+    }
+}
+
+export function showTabs(...tabIds) {
+    const tabsToShow = {}
+    tabIds.forEach(id => tabsToShow[id] = true)
+    return {
+        type: 'TAB_SHOWED',
+        payload: tabsToShow
     }
 }
