@@ -9,3 +9,11 @@ export function getList() {
         payload: req
     }
 }
+
+export function create(values) {
+    const req = axios.post(`${BASE_URL}/billing-cycles`, values)
+    return {
+        type: 'BILLING_CYCLE_CREATED',
+        payload: req
+    }
+}
