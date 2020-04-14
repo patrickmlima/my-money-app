@@ -22,7 +22,15 @@ export function update(values) {
     return submit(values, 'put');
 }
 
+export function remove(values) {
+    return submit(values, 'delete');
+}
+
 function submit(values, method) {
+    if(method === 'delete' && 
+    !window.confirm('Deseja mesmo remover essa entrada?')) {
+        return dispatch => {};
+    }
     return dispatch => {
         const id = values._id || '';
         axios.request({
@@ -30,7 +38,7 @@ function submit(values, method) {
             url: `${BASE_URL}/billing-cycles/${id}`,
             data: values
         }).then(() => {
-            toastr.success('Sucesso', `Ciclo de pagamento ${id ? 'alterado' : 'salvo'}.`);
+            toastr.success('Sucesso', 'Operação realizada com sucesso.');
             dispatch(init());
         }).catch(err => err.response.data.errors.forEach(e => toastr.error('Erro', e)));
     }
@@ -40,6 +48,14 @@ export function showUpdate(billingCycle) {
     return [
         showTabs('tabUpdate'),
         selectTab('tabUpdate'),
+        initialize('billingCycleForm', billingCycle)
+    ];
+}
+
+export function showDelete(billingCycle) {
+    return [
+        showTabs('tabDelete'),
+        selectTab('tabDelete'),
         initialize('billingCycleForm', billingCycle)
     ];
 }
