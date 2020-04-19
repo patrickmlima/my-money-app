@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { Field } from 'redux-form';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Field, arrayInsert } from 'redux-form';
 import Grid from '../common/layout/grid';
 import Input from '../common/form/input';
 
 class CreditList extends Component {
     renderRows() {
         const list = this.props.list || [];
-        console.log('list ', list);
         return list.map((item, index) => (
             <tr key={index}>
                 <td>
@@ -19,9 +20,24 @@ class CreditList extends Component {
                     placeholder='Informe o valor' readOnly={this.props.readOnly}>
                     </Field>
                 </td>
-                <td></td>
+                <td>
+                    <button type='button' className='btn btn-success'
+                    onClick={() => this.add(index + 1)}>
+                        <i className='fa fa-plus'></i>
+                    </button>
+                    <button type='button' className='btn btn-warning'
+                    onClick={() => this.add(index + 1, item)}>
+                        <i className='fa fa-clone'></i>
+                    </button>
+                </td>
             </tr>
         ));
+    }
+
+    add(index, item = {}) {
+        if(!this.props.readOnly) {
+            this.props.arrayInsert('billingCycleForm', 'credits', index, item);
+        }
     }
 
     render() {
@@ -34,7 +50,7 @@ class CreditList extends Component {
                             <tr>
                                 <th>Nome</th>
                                 <th>Valor</th>
-                                <th>A&ccedil;&otilde;es</th>
+                                <th className='table-actions'>A&ccedil;&otilde;es</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -47,4 +63,6 @@ class CreditList extends Component {
     }
 }
 
-export default CreditList;
+const mapDispatchToProps = dispatch => bindActionCreators({ arrayInsert }, dispatch);
+
+export default connect(null, mapDispatchToProps)(CreditList);
